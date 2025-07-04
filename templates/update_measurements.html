@@ -1,0 +1,101 @@
+<!-- templates/update_measurements.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen">
+    <nav class="bg-black shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('dashboard') }}" class="text-xl font-bold text-white">Gym Tracker</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="{{ url_for('dashboard') }}" class="text-sm font-medium text-gray-300 hover:text-white">Back
+                        to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-10">
+        <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white shadow-lg sm:rounded-lg">
+                <div class="py-8 px-4 sm:px-10">
+                    <h2 class="text-2xl font-bold tracking-tight text-gray-900 mb-6">Submit Your Monthly Report</h2>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div
+                        class="mb-4 rounded-md {{ 'bg-red-100 text-red-800' if category == 'error' else 'bg-green-100 text-green-800' }} p-4">
+                        <p>{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+                    <form class="space-y-6" method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">{{ form.weight_kg.label
+                                    }}</label>
+                                <div class="mt-1">
+                                    {{ form.weight_kg(class="block w-full rounded-md border-gray-300 shadow-sm
+                                    focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">{{ form.height_cm.label
+                                    }}</label>
+                                <div class="mt-1">
+                                    {{ form.height_cm(class="block w-full rounded-md border-gray-300 shadow-sm
+                                    focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.body_fat_percentage.label
+                                }}</label>
+                            <div class="mt-1">
+                                {{ form.body_fat_percentage(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.muscle_mass_kg.label
+                                }}</label>
+                            <div class="mt-1">
+                                {{ form.muscle_mass_kg(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.bone_mass_kg.label }}</label>
+                            <div class="mt-1">
+                                {{ form.bone_mass_kg(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.visceral_fat_rating.label
+                                }}</label>
+                            <div class="mt-1">
+                                {{ form.visceral_fat_rating(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            {{ form.submit(class="inline-flex justify-center rounded-md border border-transparent
+                            bg-yellow-400 py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-yellow-500") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

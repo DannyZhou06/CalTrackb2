@@ -1,26 +1,28 @@
 # forms.py
-# This file defines the forms used in the application.
-
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, SelectField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, BooleanField, DateField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, Email, EqualTo, Optional, Length, ValidationError
 from modeldb import User
 from flask_login import current_user
 
 class LoginForm(FlaskForm):
-    """A form for users to log in with a username."""
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Log In')
 
 class UserForm(FlaskForm):
-    """A form for admins to add or edit a user."""
+    """Updated form for admins to add or edit a user with more details."""
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=25)])
     full_name = StringField('Full Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     role = SelectField('Role', choices=[('member', 'Member'), ('trainer', 'Trainer')], validators=[DataRequired()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[Optional()])
+    gender = SelectField('Gender', choices=[('', 'Select...'), ('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')], validators=[Optional()])
+    intensity = SelectField('Training Intensity', choices=[('', 'Select...'), ('Beginner', 'Beginner'), ('Intermediate', 'Intermediate'), ('Advanced', 'Advanced')], validators=[Optional()])
+    injuries = TextAreaField('Injuries or Health Conditions', validators=[Optional()])
+    objective = TextAreaField('Member Objective', validators=[Optional()])
     password = PasswordField('Password (leave blank to keep current)', validators=[Optional(), EqualTo('confirm_password', message='Passwords must match.')])
     confirm_password = PasswordField('Confirm Password')
     trainer_id = SelectField('Assign Trainer', coerce=int, validators=[Optional()])
@@ -47,20 +49,28 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')
 
+class BodyMeasurementForm(FlaskForm):
+    """Form for members to submit their monthly measurements."""
+    weight_kg = FloatField('Weight (kg)', validators=[DataRequired()])
+    height_cm = FloatField('Height (cm)', validators=[DataRequired()])
+    body_fat_percentage = FloatField('Body Fat (%)', validators=[Optional()])
+    muscle_mass_kg = FloatField('Muscle Mass (kg)', validators=[Optional()])
+    bone_mass_kg = FloatField('Bone Mass (kg)', validators=[Optional()])
+    visceral_fat_rating = FloatField('Visceral Fat (Rating)', validators=[Optional()])
+    submit = SubmitField('Submit Report')
+
+
 class ChangePasswordForm(FlaskForm):
-    """Form for logged-in users to change their password."""
     old_password = PasswordField('Old Password', validators=[DataRequired()])
     new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
     submit = SubmitField('Change Password')
 
 class RequestResetForm(FlaskForm):
-    """Form for users to request a password reset email."""
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
 
 class ResetPasswordForm(FlaskForm):
-    """Form for users to reset their password using a token."""
     password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])
     submit = SubmitField('Reset Password')
