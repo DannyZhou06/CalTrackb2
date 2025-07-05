@@ -25,7 +25,8 @@ class User(db.Model, UserMixin):
     intensity = db.Column(db.String(50), nullable=True)
     
     # --- 2FA Fields ---
-    otp_secret = db.Column(db.String(16))
+    # **FIX:** Increased length from 16 to 32 to accommodate the secret key
+    otp_secret = db.Column(db.String(32))
     is_otp_enabled = db.Column(db.Boolean, nullable=False, default=False)
 
     # Relationships
