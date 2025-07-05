@@ -1,0 +1,92 @@
+<!-- templates/trainer_dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen">
+    <nav class="bg-black shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <img class="h-8 w-8 rounded-full"
+                        src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}"
+                        alt="Profile Picture">
+                    <h1 class="text-xl font-bold text-white ml-3">{{ _('Gym Tracker') }} - {{ _('Trainer') }}</h1>
+                </div>
+                <div class="flex items-center">
+                    <a href="{{ url_for('account') }}"
+                        class="text-sm font-medium text-gray-300 hover:text-white mr-4 border-r border-gray-600 pr-4">{{
+                        _('My Account') }}</a>
+                    <a href="{{ url_for('logout') }}" class="text-sm font-medium text-gray-300 hover:text-white">{{
+                        _('Logout') }}</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <h1 class="text-lg leading-6 font-semibold text-gray-900">{{ _('Your Client Dashboard') }}</h1>
+        </div>
+    </header>
+
+    <main class="py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ _('Client Name') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ _('Last Check-in') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ _('Visits This Month') }}</th>
+                                <th scope="col" class="relative px-6 py-3"><span class="sr-only">{{ _('Actions')
+                                        }}</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for client in clients %}
+                            <tr>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center">
+                                    <img class="h-10 w-10 rounded-full mr-4"
+                                        src="{{ url_for('static', filename='profile_pics/' + client.image_file) }}"
+                                        alt="Profile Picture">
+                                    <a href="{{ url_for('member_profile', member_id=client.id) }}"
+                                        class="hover:text-yellow-600">{{ client.full_name }}</a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {% if client.last_check_in %}
+                                    {{ client.last_check_in.strftime('%B %d, %Y') }}
+                                    {% else %}
+                                    {{ _('No check-ins yet') }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
+                                    client.visits_this_month }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+                                    <a href="{{ url_for('mark_attendance', member_id=client.id) }}"
+                                        class="text-yellow-600 hover:text-yellow-900">{{ _('Attendance') }}</a>
+                                    <a href="{{ url_for('edit_client', client_id=client.id) }}"
+                                        class="text-gray-600 hover:text-gray-900">{{ _('Edit Profile') }}</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">{{ _('You have no
+                                    clients assigned.') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

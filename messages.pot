@@ -1,0 +1,288 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-07-04 23:09-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app.py:46
+msgid "Please log in to access this page."
+msgstr ""
+
+#: app.py:54 app.py:64
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: app.py:141
+msgid "This account is inactive. Please contact an administrator."
+msgstr ""
+
+#: app.py:142
+msgid "Invalid username or password."
+msgstr ""
+
+#: app.py:157
+msgid "You have been logged out."
+msgstr ""
+
+#: app.py:172
+msgid "Your account has been updated!"
+msgstr ""
+
+#: app.py:189
+msgid "Your password has been updated successfully!"
+msgstr ""
+
+#: app.py:191
+msgid "Incorrect old password."
+msgstr ""
+
+#: app.py:214
+msgid ""
+"A password reset link has been generated. For now, check the server "
+"console."
+msgstr ""
+
+#: app.py:215
+msgid "No account found with that email address."
+msgstr ""
+
+#: app.py:223
+msgid "That is an invalid or expired token."
+msgstr ""
+
+#: app.py:229
+msgid "Your password has been updated! You are now able to log in."
+msgstr ""
+
+#: app.py:264
+msgid "Your new measurements have been saved!"
+msgstr ""
+
+#: app.py:275
+msgid "You do not have permission to view this profile."
+msgstr ""
+
+#: app.py:293
+msgid "You do not have permission to add measurements for this member."
+msgstr ""
+
+#: app.py:309
+#, python-format
+msgid "New measurements for %(member_name)s have been saved!"
+msgstr ""
+
+#: app.py:320
+msgid "You can only mark attendance for members."
+msgstr ""
+
+#: app.py:323
+msgid "You do not have permission to mark attendance for this member."
+msgstr ""
+
+#: app.py:343
+msgid "You do not have permission to modify attendance for this member."
+msgstr ""
+
+#: app.py:348
+#, python-format
+msgid "Attendance removed for %(member_name)s on %(date)s."
+msgstr ""
+
+#: app.py:352
+#, python-format
+msgid "Attendance marked for %(member_name)s on %(date)s."
+msgstr ""
+
+#: app.py:378
+msgid "You do not have permission to edit this client."
+msgstr ""
+
+#: app.py:401
+#, python-format
+msgid "Client %(user_name)s updated successfully."
+msgstr ""
+
+#: app.py:405
+msgid "Edit Client Profile"
+msgstr ""
+
+#: app.py:432
+msgid "Username already exists."
+msgstr ""
+
+#: app.py:433 app.py:453 templates/admin_dashboard.html:33
+msgid "Add New User"
+msgstr ""
+
+#: app.py:451
+#, python-format
+msgid ""
+"User %(user_name)s created successfully. Their temporary password is: "
+"%(password)s"
+msgstr ""
+
+#: app.py:483
+#, python-format
+msgid "User %(user_name)s updated successfully."
+msgstr ""
+
+#: app.py:489
+#, python-format
+msgid "Edit %(user_name)s"
+msgstr ""
+
+#: templates/admin_dashboard.html:11 templates/base.html:6
+#: templates/trainer_dashboard.html:13
+msgid "Gym Tracker"
+msgstr ""
+
+#: templates/admin_dashboard.html:11
+msgid "Admin"
+msgstr ""
+
+#: templates/admin_dashboard.html:16 templates/trainer_dashboard.html:18
+msgid "My Account"
+msgstr ""
+
+#: templates/admin_dashboard.html:18 templates/trainer_dashboard.html:20
+msgid "Logout"
+msgstr ""
+
+#: templates/admin_dashboard.html:26
+msgid "User Management"
+msgstr ""
+
+#: templates/admin_dashboard.html:30
+msgid "General Report (Excel)"
+msgstr ""
+
+#: templates/admin_dashboard.html:50
+msgid "Members"
+msgstr ""
+
+#: templates/admin_dashboard.html:58 templates/admin_dashboard.html:111
+msgid "Name"
+msgstr ""
+
+#: templates/admin_dashboard.html:61 templates/admin_dashboard.html:114
+msgid "Status"
+msgstr ""
+
+#: templates/admin_dashboard.html:64
+msgid "Assigned Trainer"
+msgstr ""
+
+#: templates/admin_dashboard.html:65 templates/trainer_dashboard.html:48
+msgid "Actions"
+msgstr ""
+
+#: templates/admin_dashboard.html:83 templates/admin_dashboard.html:135
+msgid "Active"
+msgstr ""
+
+#: templates/admin_dashboard.html:83 templates/admin_dashboard.html:135
+msgid "Inactive"
+msgstr ""
+
+#: templates/admin_dashboard.html:86
+msgid "None"
+msgstr ""
+
+#: templates/admin_dashboard.html:89
+msgid "Report"
+msgstr ""
+
+#: templates/admin_dashboard.html:91 templates/trainer_dashboard.html:74
+msgid "Attendance"
+msgstr ""
+
+#: templates/admin_dashboard.html:93 templates/admin_dashboard.html:118
+#: templates/admin_dashboard.html:141
+msgid "Edit"
+msgstr ""
+
+#: templates/admin_dashboard.html:103
+msgid "Trainers"
+msgstr ""
+
+#: templates/admin_dashboard.html:117
+msgid "Clients"
+msgstr ""
+
+#: templates/landing.html:13
+msgid "Welcome to Gym Tracker"
+msgstr ""
+
+#: templates/landing.html:15
+msgid ""
+"Your platform for tracking fitness goals and\n"
+"                attendance."
+msgstr ""
+
+#: templates/landing.html:20
+msgid "Member / Trainer Sign In"
+msgstr ""
+
+#: templates/landing.html:23
+msgid "Admin Sign In"
+msgstr ""
+
+#: templates/login.html:6
+msgid "Sign in to your account"
+msgstr ""
+
+#: templates/login.html:44
+msgid "Forgot your password?"
+msgstr ""
+
+#: templates/login.html:55
+msgid "Return to Home"
+msgstr ""
+
+#: templates/trainer_dashboard.html:13
+msgid "Trainer"
+msgstr ""
+
+#: templates/trainer_dashboard.html:28
+msgid "Your Client Dashboard"
+msgstr ""
+
+#: templates/trainer_dashboard.html:41
+msgid "Client Name"
+msgstr ""
+
+#: templates/trainer_dashboard.html:44
+msgid "Last Check-in"
+msgstr ""
+
+#: templates/trainer_dashboard.html:47
+msgid "Visits This Month"
+msgstr ""
+
+#: templates/trainer_dashboard.html:67
+msgid "No check-ins yet"
+msgstr ""
+
+#: templates/trainer_dashboard.html:76
+msgid "Edit Profile"
+msgstr ""
+
+#: templates/trainer_dashboard.html:81
+msgid ""
+"You have no\n"
+"                                    clients assigned."
+msgstr ""
+
