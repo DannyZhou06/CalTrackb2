@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-07-04 01:34-0500\n"
+"POT-Creation-Date: 2025-07-05 12:28-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,351 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: templates/base.html:8
+#: app.py:57
+msgid "Please log in to access this page."
+msgstr ""
+
+#: app.py:65 app.py:75
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: app.py:152
+msgid "This account is inactive. Please contact an administrator."
+msgstr ""
+
+#: app.py:153
+msgid "Invalid username or password."
+msgstr ""
+
+#: app.py:172
+msgid "Invalid authentication code."
+msgstr ""
+
+#: app.py:188
+msgid "You have been logged out."
+msgstr ""
+
+#: app.py:203
+msgid "Your account has been updated!"
+msgstr ""
+
+#: app.py:221
+msgid "Two-Factor Authentication has been enabled!"
+msgstr ""
+
+#: app.py:224
+msgid "Invalid verification code. Please try again."
+msgstr ""
+
+#: app.py:241
+msgid "Two-Factor Authentication has been disabled."
+msgstr ""
+
+#: app.py:253
+msgid "Your password has been updated successfully!"
+msgstr ""
+
+#: app.py:255
+msgid "Incorrect old password."
+msgstr ""
+
+#: app.py:278
+msgid ""
+"A password reset link has been generated. For now, check the server "
+"console."
+msgstr ""
+
+#: app.py:279
+msgid "No account found with that email address."
+msgstr ""
+
+#: app.py:287
+msgid "That is an invalid or expired token."
+msgstr ""
+
+#: app.py:293
+msgid "Your password has been updated! You are now able to log in."
+msgstr ""
+
+#: app.py:328
+msgid "Your new measurements have been saved!"
+msgstr ""
+
+#: app.py:339
+msgid "You do not have permission to view this profile."
+msgstr ""
+
+#: app.py:357
+msgid "You do not have permission to add measurements for this member."
+msgstr ""
+
+#: app.py:373
+#, python-format
+msgid "New measurements for %(member_name)s have been saved!"
+msgstr ""
+
+#: app.py:384
+msgid "You can only mark attendance for members."
+msgstr ""
+
+#: app.py:387
+msgid "You do not have permission to mark attendance for this member."
+msgstr ""
+
+#: app.py:407
+msgid "You do not have permission to modify attendance for this member."
+msgstr ""
+
+#: app.py:412
+#, python-format
+msgid "Attendance removed for %(member_name)s on %(date)s."
+msgstr ""
+
+#: app.py:416
+#, python-format
+msgid "Attendance marked for %(member_name)s on %(date)s."
+msgstr ""
+
+#: app.py:441
+msgid "You do not have permission to edit this client."
+msgstr ""
+
+#: app.py:459
+#, python-format
+msgid "Client %(user_name)s updated successfully."
+msgstr ""
+
+#: app.py:463
+msgid "Edit Client Profile"
+msgstr ""
+
+#: app.py:490
+msgid "Username already exists."
+msgstr ""
+
+#: app.py:491 app.py:494 app.py:513 templates/admin_dashboard.html:33
+msgid "Add New User"
+msgstr ""
+
+#: app.py:493
+msgid "Email address already exists."
+msgstr ""
+
+#: app.py:511
+#, python-format
+msgid ""
+"User %(user_name)s created successfully. Their temporary password is: "
+"%(password)s"
+msgstr ""
+
+#: app.py:543
+#, python-format
+msgid "User %(user_name)s updated successfully."
+msgstr ""
+
+#: app.py:549
+#, python-format
+msgid "Edit %(user_name)s"
+msgstr ""
+
+#: templates/account.html:10 templates/admin_dashboard.html:11
+#: templates/base.html:7 templates/trainer_dashboard.html:13
+#: templates/user_form.html:10
 msgid "Gym Tracker"
 msgstr ""
 
-#: templates/landing.html:14
+#: templates/account.html:14 templates/user_form.html:14
+msgid "Back to Dashboard"
+msgstr ""
+
+#: templates/account.html:26
+msgid "Account Information"
+msgstr ""
+
+#: templates/account.html:81
+msgid "Setup 2FA"
+msgstr ""
+
+#: templates/admin_dashboard.html:11
+msgid "Admin"
+msgstr ""
+
+#: templates/admin_dashboard.html:16 templates/trainer_dashboard.html:18
+msgid "My Account"
+msgstr ""
+
+#: templates/admin_dashboard.html:18 templates/trainer_dashboard.html:20
+msgid "Logout"
+msgstr ""
+
+#: templates/admin_dashboard.html:26
+msgid "User Management"
+msgstr ""
+
+#: templates/admin_dashboard.html:30
+msgid "General Report (Excel)"
+msgstr ""
+
+#: templates/admin_dashboard.html:50
+msgid "Members"
+msgstr ""
+
+#: templates/admin_dashboard.html:58 templates/admin_dashboard.html:111
+msgid "Name"
+msgstr ""
+
+#: templates/admin_dashboard.html:61 templates/admin_dashboard.html:114
+msgid "Status"
+msgstr ""
+
+#: templates/admin_dashboard.html:64
+msgid "Assigned Trainer"
+msgstr ""
+
+#: templates/admin_dashboard.html:65 templates/trainer_dashboard.html:48
+msgid "Actions"
+msgstr ""
+
+#: templates/admin_dashboard.html:83 templates/admin_dashboard.html:135
+msgid "Active"
+msgstr ""
+
+#: templates/admin_dashboard.html:83 templates/admin_dashboard.html:135
+msgid "Inactive"
+msgstr ""
+
+#: templates/admin_dashboard.html:86
+msgid "None"
+msgstr ""
+
+#: templates/admin_dashboard.html:89
+msgid "Report"
+msgstr ""
+
+#: templates/admin_dashboard.html:91 templates/trainer_dashboard.html:74
+msgid "Attendance"
+msgstr ""
+
+#: templates/admin_dashboard.html:93 templates/admin_dashboard.html:118
+#: templates/admin_dashboard.html:141
+msgid "Edit"
+msgstr ""
+
+#: templates/admin_dashboard.html:103
+msgid "Trainers"
+msgstr ""
+
+#: templates/admin_dashboard.html:117
+msgid "Assigned members"
+msgstr ""
+
+#: templates/landing.html:7
 msgid "Welcome to Gym Tracker"
 msgstr ""
 
-#: templates/landing.html:16
+#: templates/landing.html:9
 msgid ""
 "Your platform for tracking fitness goals and\n"
 "                attendance."
 msgstr ""
 
-#: templates/landing.html:21
+#: templates/landing.html:14
 msgid "Member / Trainer Sign In"
 msgstr ""
 
-#: templates/landing.html:24
+#: templates/landing.html:17
 msgid "Admin Sign In"
+msgstr ""
+
+#: templates/login.html:5
+msgid "Sign in to your account"
+msgstr ""
+
+#: templates/login.html:43
+msgid "Forgot your password?"
+msgstr ""
+
+#: templates/login.html:54
+msgid "Return to Home"
+msgstr ""
+
+#: templates/otp_setup.html:6 templates/otp_verify.html:6
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: templates/otp_setup.html:25
+msgid ""
+"Scan the image below with your authenticator app (like\n"
+"                    Google Authenticator or Authy)."
+msgstr ""
+
+#: templates/otp_setup.html:28
+msgid "Or enter this key manually:"
+msgstr ""
+
+#: templates/otp_setup.html:36
+msgid "Enter verification code"
+msgstr ""
+
+#: templates/otp_setup.html:47
+msgid "Verify and Enable 2FA"
+msgstr ""
+
+#: templates/otp_setup.html:53
+msgid "Two-Factor Authentication is currently enabled."
+msgstr ""
+
+#: templates/otp_setup.html:54
+msgid "Disabling 2FA will reduce the security of your account."
+msgstr ""
+
+#: templates/otp_setup.html:59
+msgid "Disable 2FA"
+msgstr ""
+
+#: templates/otp_setup.html:65
+msgid "Return to Account"
+msgstr ""
+
+#: templates/otp_verify.html:8
+msgid "Enter the code from your authenticator app."
+msgstr ""
+
+#: templates/trainer_dashboard.html:13
+msgid "Trainer"
+msgstr ""
+
+#: templates/trainer_dashboard.html:28
+msgid "Your Client Dashboard"
+msgstr ""
+
+#: templates/trainer_dashboard.html:41
+msgid "Client Name"
+msgstr ""
+
+#: templates/trainer_dashboard.html:44
+msgid "Last Check-in"
+msgstr ""
+
+#: templates/trainer_dashboard.html:47
+msgid "Visits This Month"
+msgstr ""
+
+#: templates/trainer_dashboard.html:67
+msgid "No check-ins yet"
+msgstr ""
+
+#: templates/trainer_dashboard.html:76
+msgid "Edit Profile"
+msgstr ""
+
+#: templates/trainer_dashboard.html:81
+msgid ""
+"You have no\n"
+"                                    clients assigned."
+msgstr ""
+
+#: templates/user_form.html:161
+msgid "Cancel"
 msgstr ""
 

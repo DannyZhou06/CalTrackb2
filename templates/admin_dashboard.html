@@ -1,6 +1,4 @@
-<!-- templates/admin_dashboard.html -->
 {% extends "base.html" %}
-
 {% block content %}
 <div class="bg-gray-100 min-h-screen">
     <nav class="bg-black shadow-sm">
@@ -10,35 +8,32 @@
                     <img class="h-8 w-8 rounded-full"
                         src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}"
                         alt="Profile Picture">
-                    <h1 class="text-xl font-bold text-white ml-3">Gym Tracker - Admin</h1>
+                    <h1 class="text-xl font-bold text-white ml-3">{{ _('Gym Tracker') }} - {{ _('Admin') }}</h1>
                 </div>
                 <div class="flex items-center">
                     <a href="{{ url_for('account') }}"
-                        class="text-sm font-medium text-gray-300 hover:text-white mr-4 border-r border-gray-600 pr-4">My
-                        Account</a>
-                    <a href="{{ url_for('logout') }}"
-                        class="text-sm font-medium text-gray-300 hover:text-white">Logout</a>
+                        class="text-sm font-medium text-gray-300 hover:text-yellow-400 mr-4 border-r border-gray-600 pr-4">{{
+                        _('My Account') }}</a>
+                    <a href="{{ url_for('logout') }}" class="text-sm font-medium text-gray-300 hover:text-yellow-400">{{
+                        _('Logout') }}</a>
                 </div>
             </div>
         </div>
     </nav>
-
     <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <h1 class="text-lg leading-6 font-semibold text-gray-900">User Management</h1>
+        <div
+            class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <h1 class="text-lg leading-6 font-semibold text-gray-900">{{ _('User Management') }}</h1>
             <div class="flex items-center space-x-3">
                 <a href="{{ url_for('download_general_report') }}"
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-                    General Report (Excel)
-                </a>
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">{{
+                    _('General Report (Excel)') }}</a>
                 <a href="{{ url_for('add_user') }}"
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-yellow-400 hover:bg-yellow-500">
-                    Add New User
-                </a>
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-yellow-400 hover:bg-yellow-500">{{
+                    _('Add New User') }}</a>
             </div>
         </div>
     </header>
-
     <main class="py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -51,104 +46,105 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
-
             <div class="mb-8">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Members</h2>
-                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Assigned Trainer</th>
-                                <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            {% for member in members %}
-                            <tr>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center">
-                                    <img class="h-10 w-10 rounded-full mr-4"
-                                        src="{{ url_for('static', filename='profile_pics/' + member.image_file) }}"
-                                        alt="Profile Picture">
-                                    <a href="{{ url_for('member_profile', member_id=member.id) }}"
-                                        class="hover:text-yellow-600">{{ member.full_name }}</a>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ 'bg-green-100 text-green-800' if member.is_active else 'bg-red-100 text-red-800' }}">
-                                        {{ 'Active' if member.is_active else 'Inactive' }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
-                                    member.trainer.full_name if member.trainer else 'None' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
-                                    <a href="{{ url_for('download_excel_report', member_id=member.id) }}"
-                                        class="text-green-600 hover:text-green-900">Report</a>
-                                    <a href="{{ url_for('mark_attendance', member_id=member.id) }}"
-                                        class="text-yellow-600 hover:text-yellow-900">Attendance</a>
-                                    <a href="{{ url_for('edit_user', user_id=member.id) }}"
-                                        class="text-gray-600 hover:text-gray-900">Edit</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ _('Members') }}</h2>
+                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ _('Name') }}</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ _('Status') }}</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ _('Assigned Trainer') }}</th>
+                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">{{ _('Actions')
+                                            }}</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for member in members %}
+                                <tr>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center">
+                                        <img class="h-10 w-10 rounded-full mr-4"
+                                            src="{{ url_for('static', filename='profile_pics/' + member.image_file) }}"
+                                            alt="Profile Picture">
+                                        <a href="{{ url_for('member_profile', member_id=member.id) }}"
+                                            class="hover:text-yellow-600">{{ member.full_name }}</a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ 'bg-green-100 text-green-800' if member.is_active else 'bg-red-100 text-red-800' }}">{{
+                                            _('Active') if member.is_active else _('Inactive') }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
+                                        member.trainer.full_name if member.trainer else _('None') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+                                        <a href="{{ url_for('download_excel_report', member_id=member.id) }}"
+                                            class="text-green-600 hover:text-green-900">{{ _('Report') }}</a>
+                                        <a href="{{ url_for('mark_attendance', member_id=member.id) }}"
+                                            class="text-yellow-600 hover:text-yellow-900">{{ _('Attendance') }}</a>
+                                        <a href="{{ url_for('edit_user', user_id=member.id) }}"
+                                            class="text-gray-600 hover:text-gray-900">{{ _('Edit') }}</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
-            <!-- **FIX:** Trainers table is now restored -->
             <div>
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Trainers</h2>
-                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Assigned members</th>
-                                <th scope="col" class="relative px-6 py-3"><span class="sr-only">Edit</span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            {% for trainer in trainers %}
-                            <tr>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center">
-                                    <img class="h-10 w-10 rounded-full mr-4"
-                                        src="{{ url_for('static', filename='profile_pics/' + trainer.image_file) }}"
-                                        alt="Profile Picture">
-                                    {{ trainer.full_name }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ 'bg-green-100 text-green-800' if trainer.is_active else 'bg-red-100 text-red-800' }}">
-                                        {{ 'Active' if trainer.is_active else 'Inactive' }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
-                                    trainer.assigned_members.count() }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ url_for('edit_user', user_id=trainer.id) }}"
-                                        class="text-gray-600 hover:text-gray-900">Edit</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ _('Trainers') }}</h2>
+                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ _('Name') }}</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ _('Status') }}</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ _('Clients') }}</th>
+                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">{{ _('Edit')
+                                            }}</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for trainer in trainers %}
+                                <tr>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center">
+                                        <img class="h-10 w-10 rounded-full mr-4"
+                                            src="{{ url_for('static', filename='profile_pics/' + trainer.image_file) }}"
+                                            alt="Profile Picture">
+                                        {{ trainer.full_name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ 'bg-green-100 text-green-800' if trainer.is_active else 'bg-red-100 text-red-800' }}">{{
+                                            _('Active') if trainer.is_active else _('Inactive') }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
+                                        trainer.assigned_members.count() }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{{ url_for('edit_user', user_id=trainer.id) }}"
+                                            class="text-gray-600 hover:text-gray-900">{{ _('Edit') }}</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

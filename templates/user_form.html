@@ -3,17 +3,15 @@
 
 {% block content %}
 <div class="bg-gray-100 min-h-screen">
-    <nav class="bg-white shadow-sm">
+    <nav class="bg-black shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <h1 class="text-xl font-bold text-indigo-600">Gym Tracker - Admin</h1>
-                    </div>
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-white">{{ _('Gym Tracker') }}</h1>
                 </div>
                 <div class="flex items-center">
-                    <a href="{{ url_for('dashboard') }}"
-                        class="text-sm font-medium text-gray-600 hover:text-gray-900">Back to Dashboard</a>
+                    <a href="{{ url_for('dashboard') }}" class="text-sm font-medium text-gray-300 hover:text-white">{{
+                        _('Back to Dashboard') }}</a>
                 </div>
             </div>
         </div>
@@ -37,7 +35,7 @@
                             <label class="block text-sm font-medium text-gray-700">{{ form.username.label }}</label>
                             <div class="mt-1">
                                 {{ form.username(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
                             </div>
                         </div>
 
@@ -45,7 +43,7 @@
                             <label class="block text-sm font-medium text-gray-700">{{ form.full_name.label }}</label>
                             <div class="mt-1">
                                 {{ form.full_name(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
                             </div>
                         </div>
 
@@ -53,15 +51,17 @@
                             <label class="block text-sm font-medium text-gray-700">{{ form.email.label }}</label>
                             <div class="mt-1">
                                 {{ form.email(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
                             </div>
                         </div>
 
+                        <!-- **FIX:** Only show these fields if the current user is an admin -->
+                        {% if current_user.role == 'admin' %}
                         <div>
                             <label class="block text-sm font-medium text-gray-700">{{ form.role.label }}</label>
                             <div class="mt-1">
                                 {{ form.role(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id="role") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm", id="role") }}
                             </div>
                         </div>
 
@@ -69,7 +69,49 @@
                             <label class="block text-sm font-medium text-gray-700">{{ form.trainer_id.label }}</label>
                             <div class="mt-1">
                                 {{ form.trainer_id(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.date_of_birth.label
+                                }}</label>
+                            <div class="mt-1">
+                                {{ form.date_of_birth(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.gender.label }}</label>
+                            <div class="mt-1">
+                                {{ form.gender(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.intensity.label }}</label>
+                            <div class="mt-1">
+                                {{ form.intensity(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.objective.label }}</label>
+                            <div class="mt-1">
+                                {{ form.objective(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm", rows=3) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">{{ form.injuries.label }}</label>
+                            <div class="mt-1">
+                                {{ form.injuries(class="block w-full rounded-md border-gray-300 shadow-sm
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm", rows=3) }}
                             </div>
                         </div>
 
@@ -77,16 +119,17 @@
                             <label class="block text-sm font-medium text-gray-700">{{ form.picture.label }}</label>
                             <div class="mt-1">
                                 {{ form.picture(class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
-                                file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50
-                                file:text-indigo-700 hover:file:bg-indigo-100") }}
+                                file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50
+                                file:text-yellow-700 hover:file:bg-yellow-100") }}
                             </div>
                         </div>
 
+                        {% if current_user.role == 'admin' %}
                         <div>
                             <label class="block text-sm font-medium text-gray-700">{{ form.password.label }}</label>
                             <div class="mt-1">
                                 {{ form.password(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
                             </div>
                         </div>
 
@@ -95,26 +138,27 @@
                                 }}</label>
                             <div class="mt-1">
                                 {{ form.confirm_password(class="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm") }}
                             </div>
                         </div>
 
                         <div class="relative flex items-start">
                             <div class="flex h-5 items-center">
-                                {{ form.is_active(class="h-4 w-4 rounded border-gray-300 text-indigo-600
-                                focus:ring-indigo-500") }}
+                                {{ form.is_active(class="h-4 w-4 rounded border-gray-300 text-yellow-600
+                                focus:ring-yellow-500") }}
                             </div>
                             <div class="ml-3 text-sm">
                                 <label for="is_active" class="font-medium text-gray-700">{{ form.is_active.label
                                     }}</label>
                             </div>
                         </div>
+                        {% endif %}
 
                         <div class="flex items-center justify-between pt-4">
                             {{ form.submit(class="inline-flex justify-center rounded-md border border-transparent
-                            bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700") }}
-                            <a href="{{ url_for('admin_dashboard') }}"
-                                class="text-sm font-medium text-gray-600 hover:text-gray-900">Cancel</a>
+                            bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800") }}
+                            <a href="{{ url_for('dashboard') }}"
+                                class="text-sm font-medium text-gray-600 hover:text-gray-900">{{ _('Cancel') }}</a>
                         </div>
                     </form>
                 </div>

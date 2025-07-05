@@ -1,4 +1,3 @@
-<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="{{ g.locale }}">
 
@@ -16,8 +15,17 @@
     </style>
 </head>
 
-<body class="h-full">
-    <div class="min-h-full">
+<body class="h-full bg-gray-100">
+    <div class="min-h-full relative">
+        <!-- Global Language Switcher -->
+        <div class="absolute top-4 right-4 z-10">
+            <a href="{{ url_for('set_language', language='en') }}"
+                class="text-sm font-medium text-gray-500 hover:text-gray-900">English</a>
+            <span class="text-gray-400">|</span>
+            <a href="{{ url_for('set_language', language='es') }}"
+                class="text-sm font-medium text-gray-500 hover:text-gray-900">Español</a>
+        </div>
+
         {% block content %}{% endblock %}
     </div>
 </body>

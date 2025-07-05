@@ -1,28 +1,36 @@
 # app.py
-import os, io, secrets, calendar
+# This is the main application file for the Gym Tracker platform.
+
+import os
+import io
+import secrets
+import calendar
+import random
+import string
+import base64
 from functools import wraps
 from datetime import datetime, date, timedelta
+
 from flask import Flask, render_template, redirect, url_for, flash, request, make_response, send_file, session, g
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_migrate import Migrate
-# Import Flask-Babel
 from flask_babel import Babel, _
 from sqlalchemy import func
 from PIL import Image
 import pandas as pd
 from wtforms import validators
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+import pyotp
+import qrcode
 
 from modeldb import db, User, Attendance, BodyMeasurement
 from forms import (LoginForm, UserForm, ChangePasswordForm, 
-                   RequestResetForm, ResetPasswordForm, UpdateAccountForm, BodyMeasurementForm)
+                   RequestResetForm, ResetPasswordForm, UpdateAccountForm, BodyMeasurementForm, OTPForm)
 
 # --- App Configuration ---
-
 app = Flask(__name__)
 app.jinja_env.add_extension('jinja2.ext.i18n')
-
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'Test')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a-very-secret-and-secure-key-for-development')
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -35,25 +43,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # --- Babel Configuration ---
 app.config['LANGUAGES'] = ['en', 'es']
-
 def get_locale():
-    # Use the language stored in the session, otherwise default to English
     return session.get('language', 'en')
 
-# Initialize Babel
 babel = Babel(app, locale_selector=get_locale)
 
-
 # --- Initialize Extensions ---
-
 db.init_app(app)
 migrate = Migrate(app, db)
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = _('Please log in to access this page.')
-
 
 # Decorators and User Loader
 def role_required(role_name):
@@ -110,6 +111,10 @@ def get_calendar_data(user_id, year, month):
             calendar_days.append({"number": 0, "date_str": None, "attended": False, "is_today": False, "is_future": False})
     return calendar_days
 
+def generate_random_password(length=4):
+    characters = string.digits
+    return ''.join(random.choice(characters) for i in range(length))
+
 # Main Routes
 @app.before_request
 def before_request():
@@ -123,7 +128,6 @@ def index():
     if current_user.is_authenticated: return redirect(url_for('dashboard'))
     return render_template('landing.html')
 
-# --- NEW: Language Switcher Route ---
 @app.route('/language/<language>')
 def set_language(language=None):
     session['language'] = language
@@ -137,6 +141,10 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             if user.is_active:
+                if user.is_otp_enabled:
+                    session['otp_user_id'] = user.id
+                    return redirect(url_for('verify_otp'))
+                
                 login_user(user)
                 session.permanent = True
                 next_page = request.args.get('next')
@@ -144,6 +152,26 @@ def login():
             else: flash(_('This account is inactive. Please contact an administrator.'), 'error')
         else: flash(_('Invalid username or password.'), 'error')
     return render_template('login.html', form=form)
+
+@app.route('/verify_otp', methods=['GET', 'POST'])
+def verify_otp():
+    if 'otp_user_id' not in session:
+        return redirect(url_for('login'))
+    
+    form = OTPForm()
+    if form.validate_on_submit():
+        user_id = session['otp_user_id']
+        user = User.query.get(user_id)
+        if user and user.verify_totp(form.token.data):
+            session.pop('otp_user_id', None)
+            login_user(user)
+            session.permanent = True
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('dashboard'))
+        else:
+            flash(_('Invalid authentication code.'), 'error')
+    return render_template('otp_verify.html', form=form)
+
 
 @app.route('/dashboard')
 @login_required
@@ -180,6 +208,39 @@ def account():
         form.full_name.data = current_user.full_name
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', form=form, image_file=image_file)
+
+@app.route('/otp_setup', methods=['GET', 'POST'])
+@login_required
+@role_required('admin')
+def otp_setup():
+    form = OTPForm()
+    if form.validate_on_submit():
+        if current_user.verify_totp(form.token.data):
+            current_user.is_otp_enabled = True
+            db.session.commit()
+            flash(_('Two-Factor Authentication has been enabled!'), 'success')
+            return redirect(url_for('account'))
+        else:
+            flash(_('Invalid verification code. Please try again.'), 'error')
+    
+    qr_code_uri = current_user.get_totp_uri()
+    img = qrcode.make(qr_code_uri)
+    buf = io.BytesIO()
+    img.save(buf)
+    buf.seek(0)
+    qr_code_image = base64.b64encode(buf.getvalue()).decode('ascii')
+    
+    return render_template('otp_setup.html', qr_code_image=qr_code_image, form=form)
+
+@app.route('/disable_otp', methods=['POST'])
+@login_required
+@role_required('admin')
+def disable_otp():
+    current_user.is_otp_enabled = False
+    db.session.commit()
+    flash(_('Two-Factor Authentication has been disabled.'), 'success')
+    return redirect(url_for('account'))
+
 
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
@@ -371,6 +432,37 @@ def trainer_dashboard():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('trainer_dashboard.html', clients=clients, image_file=image_file)
 
+@app.route('/trainer/edit_client/<int:client_id>', methods=['GET', 'POST'])
+@login_required
+@role_required('trainer')
+def edit_client(client_id):
+    client = User.query.get_or_404(client_id)
+    if client not in current_user.assigned_members:
+        flash(_('You do not have permission to edit this client.'), 'error')
+        return redirect(url_for('trainer_dashboard'))
+    
+    form = UserForm(obj=client)
+    trainers = User.query.filter_by(role='trainer').all()
+    form.trainer_id.choices = [(t.id, t.full_name) for t in trainers]
+    form.trainer_id.choices.insert(0, (0, 'None'))
+
+    if form.validate_on_submit():
+        client.full_name = form.full_name.data
+        client.date_of_birth = form.date_of_birth.data
+        client.gender = form.gender.data
+        client.injuries = form.injuries.data
+        client.objective = form.objective.data
+        client.intensity = form.intensity.data
+        if form.picture.data:
+            client.image_file = save_picture(form.picture.data)
+        db.session.commit()
+        flash(_('Client %(user_name)s updated successfully.', user_name=client.full_name), 'success')
+        return redirect(url_for('trainer_dashboard'))
+
+    image_file = url_for('static', filename='profile_pics/' + client.image_file)
+    return render_template('user_form.html', form=form, title=_("Edit Client Profile"), image_file=image_file)
+
+
 # Admin Routes
 @app.route('/admin/dashboard')
 @login_required
@@ -389,11 +481,19 @@ def add_user():
     trainers = User.query.filter_by(role='trainer').all()
     form.trainer_id.choices = [(t.id, t.full_name) for t in trainers]
     form.trainer_id.choices.insert(0, (0, 'None'))
-    form.password.validators.insert(0, validators.DataRequired())
+    
+    form.password.validators = []
+    form.confirm_password.validators = []
+    
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
             flash(_('Username already exists.'), 'error')
             return render_template('user_form.html', form=form, title=_("Add New User"))
+        if User.query.filter_by(email=form.email.data).first():
+            flash(_('Email address already exists.'), 'error')
+            return render_template('user_form.html', form=form, title=_("Add New User"))
+        
+        temp_password = generate_random_password()
         
         new_user = User(
             username=form.username.data, email=form.email.data, full_name=form.full_name.data,
@@ -401,14 +501,14 @@ def add_user():
             date_of_birth=form.date_of_birth.data, gender=form.gender.data,
             injuries=form.injuries.data, objective=form.objective.data, intensity=form.intensity.data
         )
-        new_user.set_password(form.password.data)
+        new_user.set_password(temp_password)
         if form.picture.data:
             new_user.image_file = save_picture(form.picture.data)
         if new_user.role == 'member' and form.trainer_id.data != 0:
             new_user.trainer_id = form.trainer_id.data
         db.session.add(new_user)
         db.session.commit()
-        flash(_('User %(user_name)s created successfully.', user_name=new_user.full_name), 'success')
+        flash(_('User %(user_name)s created successfully. Their temporary password is: %(password)s', user_name=new_user.full_name, password=temp_password), 'success')
         return redirect(url_for('admin_dashboard'))
     return render_template('user_form.html', form=form, title=_("Add New User"))
 
@@ -448,6 +548,7 @@ def edit_user(user_id):
     image_file = url_for('static', filename='profile_pics/' + user_to_edit.image_file)
     return render_template('user_form.html', form=form, title=_("Edit %(user_name)s", user_name=user_to_edit.full_name), image_file=image_file)
 
+# Excel Report and CLI Commands
 @app.route('/admin/report/excel/<int:member_id>')
 @login_required
 @admin_or_trainer_required
@@ -489,8 +590,6 @@ def download_general_report():
             worksheet.write(0, 0, f"Progress Report for {member.full_name}")
     output.seek(0)
     return send_file(output, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', as_attachment=True, download_name=f'General_Member_Report_{date.today().isoformat()}.xlsx')
-
-# --- CLI Commands for Database Management ---
 
 @app.cli.command("create-admin")
 def create_admin_command():

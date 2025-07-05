@@ -1,0 +1,70 @@
+<!-- templates/otp_setup.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">{{ _('Two-Factor Authentication')
+            }}</h2>
+    </div>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div
+                class="mb-4 rounded-md {{ 'bg-red-100 text-red-800' if category == 'error' else 'bg-green-100 text-green-800' }} p-4">
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% if not current_user.is_otp_enabled %}
+            <!-- Setup Instructions -->
+            <div class="text-center">
+                <p class="text-sm text-gray-600 mb-4">{{ _('Scan the image below with your authenticator app (like
+                    Google Authenticator or Authy).') }}</p>
+                <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" class="mx-auto border p-1">
+                <p class="mt-4 text-sm text-gray-600">{{ _('Or enter this key manually:') }}</p>
+                <p class="mt-1 text-lg font-mono bg-gray-100 p-2 rounded-md">{{ current_user.otp_secret }}</p>
+            </div>
+            <hr class="my-6">
+            <!-- Verification Form -->
+            <form class="space-y-6" method="POST">
+                {{ form.hidden_tag() }}
+                <div>
+                    <label for="token" class="block text-sm font-medium text-gray-700">{{ _('Enter verification code')
+                        }}</label>
+                    <div class="mt-1">
+                        {{ form.token(class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2
+                        placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm",
+                        required=True) }}
+                    </div>
+                </div>
+                <div>
+                    <button type="submit"
+                        class="flex w-full justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700">{{
+                        _('Verify and Enable 2FA') }}</button>
+                </div>
+            </form>
+            {% else %}
+            <!-- Disable 2FA -->
+            <div class="text-center">
+                <p class="text-green-700 font-semibold">{{ _('Two-Factor Authentication is currently enabled.') }}</p>
+                <p class="mt-4 text-sm text-gray-600">{{ _('Disabling 2FA will reduce the security of your account.') }}
+                </p>
+                <form action="{{ url_for('disable_otp') }}" method="POST" class="mt-4">
+                    <button type="submit"
+                        class="flex w-full justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-700">{{
+                        _('Disable 2FA') }}</button>
+                </form>
+            </div>
+            {% endif %}
+            <div class="mt-6 text-center">
+                <a href="{{ url_for('account') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">{{
+                    _('Return to Account') }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

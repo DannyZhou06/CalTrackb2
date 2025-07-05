@@ -9,3 +9,5 @@ xlsxwriter
 gunicorn
 psycopg2-binary
 Flask-Babel
+pyotp
+qrcode
